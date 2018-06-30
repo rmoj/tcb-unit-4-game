@@ -26,13 +26,21 @@ $(document).ready(function() {
 
     //Move characters to starting area
     $('.char').appendTo('#start-here');
+
+    //set Status flag to ready
+    //Value of status flag may be any of the following:
+    // 'ready' -> intial value, no player charcter selected yet
+    // 'player' -> character is selected as player
+    // 'enemy'
+
+    $('.char').each(function() {
+      $(this).data('status', 'ready');
+    });
   }
 
-  function choosePlayer() {}
-
   initializeGame();
-  choosePlayer();
-  chooseEnemy();
-  fight();
-  gameEnd();
+
+  // chooseCharacters();
+  // fight();
+  // gameEnd();
 }); // EOF
