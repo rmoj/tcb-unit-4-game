@@ -41,14 +41,17 @@ $(document).ready(function() {
   var hasDefender = 0;
   var playerHP = 0;
   var playerAP = 0;
+  var playerBaseAP = 0;
   var defenderHP = 0;
   var defenderCAP = 0;
+  var defenderName = '';
 
   function initializeGame() {
     //initialize state variables
     hasDefender = 0;
     playerHP = 0;
     playerAP = 0;
+    playerBaseAP = 0;
     defenderHP = 0;
     defenderCAP = 0;
 
@@ -77,6 +80,8 @@ $(document).ready(function() {
     }
   }
 
+  function reset() {}
+
   createCharacters();
 
   $('.char').on('click', function() {
@@ -84,6 +89,8 @@ $(document).ready(function() {
     if ($(this).data('status') === 'ready') {
       $('#' + sId).data('status', 'player');
       $('#' + sId).appendTo('#player');
+      playerHP = charArray[sId].healthPoints;
+      playerBaseAP = charArray[sId].attackPower;
 
       $('.char').each(function() {
         if ($(this).attr('id') != sId) {
@@ -95,8 +102,43 @@ $(document).ready(function() {
       $('#' + sId).data('status', 'defender');
       $('#' + sId).appendTo('#defender');
       hasDefender = 1;
+      defenderName = charArray[sId].name;
+      defenderHP = charArray[sId].healthPoints;
+      defenderCAP = charArray[sId].counterAttackPower;
     }
   });
+
+  $('#attack').on('click', function() {
+    if (hasDefender == 1) {
+      //Fire event only when there is a defender
+      //Update HP of player and defender
+      playerAP += playerBaseAP;
+      defenderHP -= playerAP;
+      playerHP -= defenderCAP;
+
+      //Display new HP values
+      $('#player p:nth-child(3)').text(playerHP);
+      $('#defender p:nth-child(3)').text(defenderHP);
+
+      //Display fight status
+
+      if (defenderHP <= 0) {
+      }
+
+      if (playerHP <= 0) {
+      }
+    }
+  });
+
+  function getGameState() {
+    console.log('playerHP: ' + playerHP);
+    console.log('playerAP: ' + playerAP);
+    console.log('playerBaseAP: ' + playerBaseAP);
+    console.log('defenderHP: ' + defenderHP);
+    console.log('defenderCAP: ' + defenderCAP);
+  }
+
+  // console.log(playerAP);
 
   // chooseCharacters();
   // fight();

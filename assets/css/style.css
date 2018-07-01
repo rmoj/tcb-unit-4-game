@@ -2,6 +2,7 @@ body {
   background: url('../images/swsith.jpeg');
   background-size: cover;
   color: white;
+  width: 960px;
 }
 
 p {
