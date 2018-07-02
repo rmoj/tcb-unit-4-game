@@ -8,32 +8,32 @@ $(document).ready(function() {
       name: 'Darth Sidius',
       source: 'assets/images/sidious.jpg',
       healthPoints: 100,
-      attackPower: 10,
-      counterAttackPower: 25
+      attackPower: 16,
+      counterAttackPower: 5
     },
 
     {
       name: 'Darth Vader',
       source: 'assets/images/vader.jpg',
-      healthPoints: 130,
-      attackPower: 15,
-      counterAttackPower: 20
+      healthPoints: 120,
+      attackPower: 8,
+      counterAttackPower: 10
     },
 
     {
       name: 'Count Dooku',
       source: 'assets/images/countdooku.jpg',
-      healthPoints: 170,
-      attackPower: 20,
-      counterAttackPower: 15
+      healthPoints: 150,
+      attackPower: 4,
+      counterAttackPower: 20
     },
 
     {
       name: 'Darth Maul',
       source: 'assets/images/maul.jpg',
-      healthPoints: 200,
-      attackPower: 25,
-      counterAttackPower: 10
+      healthPoints: 180,
+      attackPower: 2,
+      counterAttackPower: 25
     }
   ];
 
@@ -84,7 +84,6 @@ $(document).ready(function() {
         }
       });
     } else if ($(this).data('status') === 'enemy' && hasDefender == 0) {
-      // $('#' + sId).data('status', 'defender');
       $('#defender')
         .children()
         .hide();
@@ -100,36 +99,36 @@ $(document).ready(function() {
     if (hasDefender == 1) {
       //Attack enebled only when there is a defender
 
-      //Update HP of player and defender
+      //Update HP of defender
       playerAP += playerBaseAP;
       defenderHP -= playerAP;
-      playerHP -= defenderCAP;
-
-      //Display new HP values
-      $('#player p:nth-child(3)').text(playerHP);
       $('#defender p:nth-child(3)').text(defenderHP);
-
-      //Display fight status
       $('#status1').text(
         'You Attacked ' + defenderName + ' for ' + playerAP + ' damage'
       );
-      $('#status2').text(
-        defenderName + ' attacked you for ' + defenderCAP + ' damage'
-      );
 
-      if (playerHP <= 0) {
-        $('#status1').text('You have been defeated...GAME  OVER! ! !');
-        $('#status2').empty();
-        $('#restart').show();
-        hasDefender = 0; //Disable any further attacks
-      }
-
-      if (defenderHP <= 0) {
+      //Defender wins
+      if (defenderHP > 0) {
+        //Update HP of player only if enemy is still undeafeated
+        playerHP -= defenderCAP;
+        $('#player p:nth-child(3)').text(playerHP);
+        $('#status2').text(
+          defenderName + ' attacked you for ' + defenderCAP + ' damage'
+        );
+        if (playerHP <= 0) {
+          //Check if player lost
+          $('#status1').text('You have been defeated...GAME  OVER! ! !');
+          $('#status2').empty();
+          $('#restart').show();
+          hasDefender = 0; //Disable any further attacks
+        }
+      } else {
         $('#defender')
           .children()
           .css('visibility', 'hidden');
         hasDefender = 0; // Disable further attacks
         if ($('#enemies').children().length > 0) {
+          //Check if there are enemies left to fight
           $('#status1').text(
             'You have defeated ' +
               defenderName +
@@ -137,7 +136,9 @@ $(document).ready(function() {
           );
           $('#status2').text('');
         } else {
+          //Player wins game
           $('#status1').text('You won!!!!   GAME OVER!!!');
+          $('#status2').empty();
           $('#restart').show();
         }
       }
@@ -145,17 +146,19 @@ $(document).ready(function() {
   });
 
   $('#restart').on('click', function() {
+    //Send characters back to starting area
     $('.char')
       .appendTo('#start-here')
       .css('visibility', 'visible')
       .show();
     $('.char').data('status', 'ready');
 
+    //reset HP values
     for (var i = 0; i < charArray.length; i++) {
       $('#' + i + ' p:nth-child(3)').text(charArray[i].healthPoints);
     }
 
-    $('#status1, #status2').empty();
+    //reset state variables and page elements
     hasDefender = 0;
     playerHP = 0;
     playerAP = 0;
@@ -163,6 +166,7 @@ $(document).ready(function() {
     defenderHP = 0;
     defenderCAP = 0;
     defenderName = '';
+    $('#status1, #status2').empty();
     $('#restart').hide();
   });
 });
