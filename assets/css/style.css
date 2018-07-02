@@ -1,5 +1,5 @@
 body {
-  background: url('../images/swsith.jpeg');
+  background: url('../images/swbg.png');
   background-size: cover;
   color: white;
   width: 960px;
@@ -10,7 +10,8 @@ p {
 }
 
 img {
-  width: 100%;
+  height: 72px;
+  width: 126px;
 }
 
 #status1,

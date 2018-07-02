@@ -53,6 +53,8 @@ $(document).ready(function() {
       $('#start-here').append(d);
       d.attr('id', i);
       d.addClass('char col-md-2 pt-2 border border-success');
+      d.css('background-color', 'white');
+      d.css('color', 'black');
 
       //Character type status flags prevents the selection of multiple player characters and enemies.
       //Value of status flag, which is a custom attribute added to character div, may be any of the following:
@@ -61,9 +63,9 @@ $(document).ready(function() {
       // 'enemy' -> non-player characters
 
       d.data('status', 'ready'); //set character type status to ready
-      d.append('<p>' + charArray[i].name + '</p>');
+      d.append('<p class="m-0">' + charArray[i].name + '</p>');
       d.append("<img src='" + charArray[i].source + "'/>");
-      d.append('<p>' + charArray[i].healthPoints + '</p>');
+      d.append('<p class="mb-0">' + charArray[i].healthPoints + '</p>');
     }
   }
 
@@ -81,6 +83,7 @@ $(document).ready(function() {
         if ($(this).attr('id') != sId) {
           $(this).data('status', 'enemy');
           $(this).appendTo('#enemies');
+          $(this).css('background-color', 'red');
         }
       });
     } else if ($(this).data('status') === 'enemy' && hasDefender == 0) {
@@ -88,6 +91,8 @@ $(document).ready(function() {
         .children()
         .hide();
       $('#' + sId).appendTo('#defender');
+      $('#' + sId).css('background-color', 'black');
+      $('#' + sId).css('color', 'white');
       hasDefender = 1;
       defenderName = charArray[sId].name;
       defenderHP = charArray[sId].healthPoints;
@@ -152,6 +157,8 @@ $(document).ready(function() {
       .css('visibility', 'visible')
       .show();
     $('.char').data('status', 'ready');
+    $('.char').css('background-color', 'white');
+    $('.char').css('color', 'black');
 
     //reset HP values
     for (var i = 0; i < charArray.length; i++) {
