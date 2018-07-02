@@ -12,3 +12,9 @@ p {
 img {
   width: 100%;
 }
+
+#status1,
+#status2 {
+  line-height: 1;
+  /* font-size: 1rem; */
+}

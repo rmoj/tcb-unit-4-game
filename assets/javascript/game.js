@@ -15,7 +15,7 @@ $(document).ready(function() {
     {
       name: 'Darth Vader',
       source: 'assets/images/vader.jpg',
-      healthPoints: 150,
+      healthPoints: 130,
       attackPower: 15,
       counterAttackPower: 20
     },
@@ -23,7 +23,7 @@ $(document).ready(function() {
     {
       name: 'Count Dooku',
       source: 'assets/images/countdooku.jpg',
-      healthPoints: 200,
+      healthPoints: 170,
       attackPower: 20,
       counterAttackPower: 15
     },
@@ -31,7 +31,7 @@ $(document).ready(function() {
     {
       name: 'Darth Maul',
       source: 'assets/images/maul.jpg',
-      healthPoints: 250,
+      healthPoints: 200,
       attackPower: 25,
       counterAttackPower: 10
     }
@@ -45,19 +45,7 @@ $(document).ready(function() {
   var defenderHP = 0;
   var defenderCAP = 0;
   var defenderName = '';
-
-  function initializeGame() {
-    //initialize state variables
-    hasDefender = 0;
-    playerHP = 0;
-    playerAP = 0;
-    playerBaseAP = 0;
-    defenderHP = 0;
-    defenderCAP = 0;
-
-    //Move characters to starting area
-    $('.char').appendTo('#start-here');
-  }
+  $('#restart').hide();
 
   function createCharacters() {
     for (var i = 0; i < charArray.length; i++) {
@@ -71,7 +59,6 @@ $(document).ready(function() {
       // 'ready' -> intial value, no player charcter selected yet
       // 'player' -> character is selected as player
       // 'enemy' -> non-player characters
-      // 'defender' -> enemy currently selected to fight player
 
       d.data('status', 'ready'); //set character type status to ready
       d.append('<p>' + charArray[i].name + '</p>');
@@ -79,8 +66,6 @@ $(document).ready(function() {
       d.append('<p>' + charArray[i].healthPoints + '</p>');
     }
   }
-
-  function reset() {}
 
   createCharacters();
 
@@ -99,7 +84,10 @@ $(document).ready(function() {
         }
       });
     } else if ($(this).data('status') === 'enemy' && hasDefender == 0) {
-      $('#' + sId).data('status', 'defender');
+      // $('#' + sId).data('status', 'defender');
+      $('#defender')
+        .children()
+        .hide();
       $('#' + sId).appendTo('#defender');
       hasDefender = 1;
       defenderName = charArray[sId].name;
@@ -110,7 +98,8 @@ $(document).ready(function() {
 
   $('#attack').on('click', function() {
     if (hasDefender == 1) {
-      //Fire event only when there is a defender
+      //Attack enebled only when there is a defender
+
       //Update HP of player and defender
       playerAP += playerBaseAP;
       defenderHP -= playerAP;
@@ -121,26 +110,59 @@ $(document).ready(function() {
       $('#defender p:nth-child(3)').text(defenderHP);
 
       //Display fight status
-
-      if (defenderHP <= 0) {
-      }
+      $('#status1').text(
+        'You Attacked ' + defenderName + ' for ' + playerAP + ' damage'
+      );
+      $('#status2').text(
+        defenderName + ' attacked you for ' + defenderCAP + ' damage'
+      );
 
       if (playerHP <= 0) {
+        $('#status1').text('You have been defeated...GAME  OVER! ! !');
+        $('#status2').empty();
+        $('#restart').show();
+        hasDefender = 0; //Disable any further attacks
+      }
+
+      if (defenderHP <= 0) {
+        $('#defender')
+          .children()
+          .css('visibility', 'hidden');
+        hasDefender = 0; // Disable further attacks
+        if ($('#enemies').children().length > 0) {
+          $('#status1').text(
+            'You have defeated ' +
+              defenderName +
+              ', you can choose to fight another enemy.'
+          );
+          $('#status2').text('');
+        } else {
+          $('#status1').text('You won!!!!   GAME OVER!!!');
+          $('#restart').show();
+        }
       }
     }
   });
 
-  function getGameState() {
-    console.log('playerHP: ' + playerHP);
-    console.log('playerAP: ' + playerAP);
-    console.log('playerBaseAP: ' + playerBaseAP);
-    console.log('defenderHP: ' + defenderHP);
-    console.log('defenderCAP: ' + defenderCAP);
-  }
+  $('#restart').on('click', function() {
+    $('.char')
+      .appendTo('#start-here')
+      .css('visibility', 'visible')
+      .show();
+    $('.char').data('status', 'ready');
 
-  // console.log(playerAP);
+    for (var i = 0; i < charArray.length; i++) {
+      $('#' + i + ' p:nth-child(3)').text(charArray[i].healthPoints);
+    }
 
-  // chooseCharacters();
-  // fight();
-  // gameEnd();
-}); // EOF
+    $('#status1, #status2').empty();
+    hasDefender = 0;
+    playerHP = 0;
+    playerAP = 0;
+    playerBaseAP = 0;
+    defenderHP = 0;
+    defenderCAP = 0;
+    defenderName = '';
+    $('#restart').hide();
+  });
+});
