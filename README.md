@@ -18,6 +18,10 @@ Note that, your attack power is increased by an amount equivalent to your base a
 - Javascript
 - [Bootstrap](https://getbootstrap.com/)
 
+## Notes
+
+For those new to tech, this project showcases how to utilize the JQuery library to dynamically create HTML elements, attach custom attributes to them, and move them to another location.
+
 ## Author
 
 [Rene Mojica](https://github.com/rmoj)
